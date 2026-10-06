@@ -48,7 +48,7 @@ class WeatherRow:
 
 def to_rufas_rows(payload: Mapping[str, Any], period: Period) -> list[WeatherRow]:
     series = _extract_series(payload)
-    fill_value = payload.get("header", {}).get("fill_value", DEFAULT_FILL_VALUE)
+    fill_value = (payload.get("header") or {}).get("fill_value", DEFAULT_FILL_VALUE)
 
     rows: list[WeatherRow] = []
     missing: list[MissingValue] = []

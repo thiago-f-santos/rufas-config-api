@@ -1,3 +1,6 @@
-from importlib.metadata import version
+from importlib.metadata import PackageNotFoundError, version
 
-__version__ = version("rufas-config-api")
+try:
+    __version__ = version("rufas-config-api")
+except PackageNotFoundError:
+    __version__ = "0.1.0"

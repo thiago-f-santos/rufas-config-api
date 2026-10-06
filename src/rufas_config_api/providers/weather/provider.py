@@ -38,8 +38,9 @@ class WeatherProvider:
         parameters: Sequence[str],
         payload: Mapping[str, Any],
     ) -> dict[str, Any]:
-        header = payload.get("header", {})
-        coordinates = payload.get("geometry", {}).get("coordinates", [])
+        header = payload.get("header") or {}
+        geometry = payload.get("geometry") or {}
+        coordinates = geometry.get("coordinates") or []
         return {
             "source": self.SOURCE,
             "endpoint": self._client.endpoint_url,
