@@ -1,0 +1,243 @@
+{
+    "profile_id": "go_cx_argilosa_01",
+    "location": {
+        "latitude": -13.95026,
+        "longitude": -49.31703
+    },
+    "group": {
+        "classe": "CAMBISSOLO HÁPLICO",
+        "textura": "argilosa",
+        "unidade_ibge": "CXbd72",
+        "pct_area_agricola_grupo": 4.2
+    },
+    "point_type": "representativo_com_analogo",
+    "source_profile": {
+        "dataset": "Brazilian Soil Dataset 2024 v3",
+        "doi": "10.60502/SoilData/BCAV2B",
+        "file_md5": "cb99eb0908691a2e221ba56569da1041",
+        "dataset_id": "ctb0569",
+        "observacao_id": "1",
+        "taxon_original": "CAMBISSOLO",
+        "classe_sibcs_convertida": "CAMBISSOLO HÁPLICO",
+        "licenca": "CC BY-NC 4.0",
+        "coord_precisao_m": 1000.0,
+        "latitude": -15.233889,
+        "longitude": -49.718364,
+        "distance_km": 149.12
+    },
+    "horizons_used": [
+        {
+            "profund_sup": 0.0,
+            "profund_inf": 10.0,
+            "argila": 410.0,
+            "silte": 90.0,
+            "areia": 500.0,
+            "areia_grossa": 50.0,
+            "areia_fina": 450.0,
+            "carbono": 58.0,
+            "ph": 6.5,
+            "dsi": null,
+            "agua_equivalente": null,
+            "fonte_fracoes_arenosas": "bpd-55-rcc-go.pdf | https://ainfo.cnptia.embrapa.br/digital/bitstream/item/89279/1/bpd-55-rcc-go.pdf | pagina 32 do PDF (ANALISES FISICO-QUIMICA, Perfil n 01, Lab SOLOCRIA, protocolo 09697-09700)",
+            "preenchido_do_boletim": [
+                "carbon"
+            ]
+        },
+        {
+            "profund_sup": 10.0,
+            "profund_inf": 142.0,
+            "argila": 500.0,
+            "silte": 140.0,
+            "areia": 360.0,
+            "areia_grossa": 120.0,
+            "areia_fina": 240.0,
+            "carbono": 21.5,
+            "ph": 6.1,
+            "dsi": null,
+            "agua_equivalente": null,
+            "fonte_fracoes_arenosas": "bpd-55-rcc-go.pdf | https://ainfo.cnptia.embrapa.br/digital/bitstream/item/89279/1/bpd-55-rcc-go.pdf | pagina 32 do PDF (ANALISES FISICO-QUIMICA, Perfil n 01, Lab SOLOCRIA, protocolo 09697-09700)",
+            "preenchido_do_boletim": []
+        },
+        {
+            "profund_sup": 142.0,
+            "profund_inf": 186.0,
+            "argila": 570.0,
+            "silte": 60.0,
+            "areia": 370.0,
+            "areia_grossa": 60.0,
+            "areia_fina": 310.0,
+            "carbono": 10.5,
+            "ph": 6.4,
+            "dsi": null,
+            "agua_equivalente": null,
+            "fonte_fracoes_arenosas": "bpd-55-rcc-go.pdf | https://ainfo.cnptia.embrapa.br/digital/bitstream/item/89279/1/bpd-55-rcc-go.pdf | pagina 32 do PDF (ANALISES FISICO-QUIMICA, Perfil n 01, Lab SOLOCRIA, protocolo 09697-09700)",
+            "preenchido_do_boletim": []
+        },
+        {
+            "profund_sup": 186.0,
+            "profund_inf": 230.0,
+            "argila": 430.0,
+            "silte": 80.0,
+            "areia": 490.0,
+            "areia_grossa": 40.0,
+            "areia_fina": 450.0,
+            "carbono": 1.2,
+            "ph": 6.3,
+            "dsi": null,
+            "agua_equivalente": null,
+            "fonte_fracoes_arenosas": "bpd-55-rcc-go.pdf | https://ainfo.cnptia.embrapa.br/digital/bitstream/item/89279/1/bpd-55-rcc-go.pdf | pagina 32 do PDF (ANALISES FISICO-QUIMICA, Perfil n 01, Lab SOLOCRIA, protocolo 09697-09700)",
+            "preenchido_do_boletim": [
+                "carbon"
+            ]
+        }
+    ],
+    "field_origins": {
+        "coarse_sand_fraction": {
+            "method": "boletim_original_transcrito",
+            "reference": "bpd-55-rcc-go.pdf | https://ainfo.cnptia.embrapa.br/digital/bitstream/item/89279/1/bpd-55-rcc-go.pdf | pagina 32 do PDF (ANALISES FISICO-QUIMICA, Perfil n 01, Lab SOLOCRIA, protocolo 09697-09700)"
+        },
+        "fine_sand_fraction": {
+            "method": "boletim_original_transcrito",
+            "reference": "bpd-55-rcc-go.pdf | https://ainfo.cnptia.embrapa.br/digital/bitstream/item/89279/1/bpd-55-rcc-go.pdf | pagina 32 do PDF (ANALISES FISICO-QUIMICA, Perfil n 01, Lab SOLOCRIA, protocolo 09697-09700)"
+        },
+        "moisture_equivalent": {
+            "method": "boletim_original_transcrito",
+            "reference": "bpd-55-rcc-go.pdf | https://ainfo.cnptia.embrapa.br/digital/bitstream/item/89279/1/bpd-55-rcc-go.pdf | pagina 32 do PDF (ANALISES FISICO-QUIMICA, Perfil n 01, Lab SOLOCRIA, protocolo 09697-09700)"
+        },
+        "clay_fraction": {
+            "method": "soildata_ponderado",
+            "reference": "10.60502/SoilData/BCAV2B"
+        },
+        "silt_fraction": {
+            "method": "soildata_ponderado",
+            "reference": "10.60502/SoilData/BCAV2B"
+        },
+        "sand_fraction": {
+            "method": "soildata_ponderado",
+            "reference": "10.60502/SoilData/BCAV2B"
+        },
+        "organic_carbon_fraction": {
+            "method": "soildata_ponderado",
+            "reference": "10.60502/SoilData/BCAV2B"
+        },
+        "pH": {
+            "method": "soildata_ponderado",
+            "reference": "10.60502/SoilData/BCAV2B"
+        },
+        "rock_fraction": {
+            "method": "soildata_ponderado",
+            "reference": "10.60502/SoilData/BCAV2B"
+        },
+        "bulk_density": {
+            "method": "ptf",
+            "reference": "Benites, V.M.; Machado, P.L.O.A.; Fidalgo, E.C.C.; Coelho, M.R.; Madari, B.E. (2007). Pedotransfer functions for estimating soil bulk density from existing soil survey reports in Brazil. Geoderma 139:90-97, Table 5, model 6. doi:10.1016/j.geoderma.2007.01.005",
+            "valor_ptf_original_por_camada": [
+                0.8418,
+                0.9993000000000001,
+                1.1253,
+                1.130988888888889
+            ],
+            "valor_gravado_por_camada": [
+                1.1,
+                1.1,
+                1.1253,
+                1.130988888888889
+            ],
+            "truncado_no_limite_do_schema": [
+                true,
+                true,
+                false,
+                false
+            ]
+        },
+        "wilting_point_water_concentration": {
+            "method": "ptf_tomasella_nivel_4",
+            "reference": "Tomasella, J.; Hodnett, M.G.; Rossato, L. (2000). Pedotransfer functions for the estimation of soil water retention in Brazilian soils. Soil Science Society of America Journal 64:327-338, Tables 7 and 8 (Step 4), levels 1 to 4, with the van Genuchten (1980) equation. doi:10.2136/sssaj2000.641327x"
+        },
+        "field_capacity_water_concentration": {
+            "method": "ptf_tomasella_nivel_4",
+            "reference": "Tomasella, J.; Hodnett, M.G.; Rossato, L. (2000). Pedotransfer functions for the estimation of soil water retention in Brazilian soils. Soil Science Society of America Journal 64:327-338, Tables 7 and 8 (Step 4), levels 1 to 4, with the van Genuchten (1980) equation. doi:10.2136/sssaj2000.641327x"
+        },
+        "saturation_point_water_concentration": {
+            "method": "1 - bulk_density / 2.65",
+            "reference": "Saturation point = 1 - bulk density / 2.65, the particle density convention used by the design spec (section 6.2) and by Saxton and Rawls (2006), Eq. [6] and [8]. doi:10.2136/sssaj2005.0117"
+        },
+        "saturated_hydraulic_conductivity": {
+            "method": "veloso_2024_tabela_13_2_log10_ds_theta1500",
+            "reference": "Veloso, M.F.; Rodrigues, L.N.; Ottoni, M.V. (2024). Capitulo 13: Funcoes de Pedotransferencia para a Estimativa de Parametros Fisico-Hidricos do Solo do Bioma Cerrado, em Agricultura irrigada no Cerrado: subsidios para o desenvolvimento sustentavel (Servico Geologico do Brasil). Tabela 13.2, equacao log(ks) = 3,798054 - 7,860309 log(Ds) - 5,236486 theta1500 (Ks em mm/h, Ds em g/cm3, theta1500 em m3/m3). Fonte original: Veloso (2021), dissertacao UFV, locus.ufv.br/handle/123456789/29891. Base do logaritmo nao declarada no texto; adotada log10 (ver docs/equacoes.md).",
+            "entradas": "densidade gravada e ponto de murcha de Tomasella (mesma camada)",
+            "comparacao_saxton_rawls_mm_h_por_camada": [
+                10.91,
+                9.41,
+                6.12,
+                5.53
+            ],
+            "nota_comparacao": "Saxton e Rawls (2006) so para comparacao; nao entra no soil.json. Diverge das medicoes de Latossolo do Cerrado (dezenas a centenas de mm/h)."
+        },
+        "second_moisture_condition_parameter": {
+            "method": "grupo_hidrologico_D_pastagem",
+            "reference": "Sartori, A.; Lombardi Neto, F.; Genovez, A.M. (2005). Classificacao hidrologica de solos brasileiros para a estimativa da chuva excedente com o metodo do Servico de Conservacao do Solo dos Estados Unidos. Revista Brasileira de Recursos Hidricos 10(4), Parte 1 (grupos hidrologicos, p. 11-12) e Parte 2 (Tabela 3, TR-55 1986, pastagem em condicao media). Sem doi; ISSN 2318-0331"
+        },
+        "initial_temperature": {
+            "method": "nasa_power_climatology_T2M_ANN",
+            "reference": "https://power.larc.nasa.gov/"
+        },
+        "soil_water_concentration": {
+            "method": "igual a field_capacity_water_concentration",
+            "reference": "design spec, secao 6.2"
+        }
+    },
+    "equations": [
+        {
+            "name": "bulk_density",
+            "version": "publicada",
+            "reference": "Benites, V.M.; Machado, P.L.O.A.; Fidalgo, E.C.C.; Coelho, M.R.; Madari, B.E. (2007). Pedotransfer functions for estimating soil bulk density from existing soil survey reports in Brazil. Geoderma 139:90-97, Table 5, model 6. doi:10.1016/j.geoderma.2007.01.005"
+        },
+        {
+            "name": "water_retention",
+            "version": "publicada",
+            "reference": "Tomasella, J.; Hodnett, M.G.; Rossato, L. (2000). Pedotransfer functions for the estimation of soil water retention in Brazilian soils. Soil Science Society of America Journal 64:327-338, Tables 7 and 8 (Step 4), levels 1 to 4, with the van Genuchten (1980) equation. doi:10.2136/sssaj2000.641327x"
+        },
+        {
+            "name": "saturated_conductivity",
+            "version": "publicada",
+            "reference": "Veloso, M.F.; Rodrigues, L.N.; Ottoni, M.V. (2024). Capitulo 13: Funcoes de Pedotransferencia para a Estimativa de Parametros Fisico-Hidricos do Solo do Bioma Cerrado, em Agricultura irrigada no Cerrado: subsidios para o desenvolvimento sustentavel (Servico Geologico do Brasil). Tabela 13.2, equacao log(ks) = 3,798054 - 7,860309 log(Ds) - 5,236486 theta1500 (Ks em mm/h, Ds em g/cm3, theta1500 em m3/m3). Fonte original: Veloso (2021), dissertacao UFV, locus.ufv.br/handle/123456789/29891. Base do logaritmo nao declarada no texto; adotada log10 (ver docs/equacoes.md)."
+        },
+        {
+            "name": "saturated_conductivity_saxton",
+            "version": "publicada",
+            "reference": "Saxton, K.E.; Rawls, W.J. (2006). Soil water characteristic estimates by texture and organic matter for hydrologic solutions. Soil Science Society of America Journal 70:1569-1578, Table 1, Eq. [1]-[10] and [14]-[18]. doi:10.2136/sssaj2005.0117. Usada apenas como comparacao na proveniencia."
+        },
+        {
+            "name": "curve_number",
+            "version": "publicada",
+            "reference": "Sartori, A.; Lombardi Neto, F.; Genovez, A.M. (2005). Classificacao hidrologica de solos brasileiros para a estimativa da chuva excedente com o metodo do Servico de Conservacao do Solo dos Estados Unidos. Revista Brasileira de Recursos Hidricos 10(4), Parte 1 (grupos hidrologicos, p. 11-12) e Parte 2 (Tabela 3, TR-55 1986, pastagem em condicao media). Sem doi; ISSN 2318-0331"
+        },
+        {
+            "name": "saturation",
+            "version": "publicada",
+            "reference": "Saturation point = 1 - bulk density / 2.65, the particle density convention used by the design spec (section 6.2) and by Saxton and Rawls (2006), Eq. [6] and [8]. doi:10.2136/sssaj2005.0117"
+        }
+    ],
+    "pilot_defaults": {
+        "average_subbasin_slope": 0.05,
+        "slope_length": 50,
+        "manning_roughness_coefficient": 0.4,
+        "support_practice_factor": 0.08,
+        "albedo": 0.16,
+        "soil_evaporation_compensation_coefficient": 0.95,
+        "initial_residue": 0.0,
+        "denitrification_rate_coefficient": 1.4,
+        "denitrification_threshold_water_content": 1.0,
+        "residue_fresh_organic_mineralization_rate": 0.05,
+        "humus_mineralization_rate_factor": 0.003,
+        "initial_fresh_organic_phosphorus_concentration": 0.0,
+        "ammonium_volatilization_cation_exchange_factor": 0.45
+    },
+    "warnings": [
+        "horizonte 186-230 cm do SoilData; o boletim transcreve base 210 cm (mantida a base do SoilData)",
+        "camada 1: densidade da PTF 0.842 g/cm3 fora da faixa do schema do RuFaS (1.1-1.9); gravada como 1.100 (limite do schema). A saturacao e a Ksat usam o valor gravado.",
+        "camada 2: densidade da PTF 0.999 g/cm3 fora da faixa do schema do RuFaS (1.1-1.9); gravada como 1.100 (limite do schema). A saturacao e a Ksat usam o valor gravado."
+    ],
+    "built_at": "2026-10-20"
+}
