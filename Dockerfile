@@ -6,6 +6,8 @@ RUN uv sync --frozen --no-dev --no-install-project
 COPY README.md ./
 COPY src ./src
 RUN uv sync --frozen --no-dev
+COPY data ./data
+RUN .venv/bin/python -m rufas_config_api.providers.soil.index --data-dir data/soil --output data/soil/soil_catalog.sqlite
 
 FROM python:3.14-slim-bookworm
 RUN useradd --create-home app
