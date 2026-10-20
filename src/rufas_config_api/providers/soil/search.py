@@ -27,11 +27,6 @@ def haversine_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
 
 
 def find_nearest(catalog: SoilCatalog, location: Location, max_rings: int) -> SoilMatch:
-    """Nearest profile by great-circle distance, searched ring by ring around the H3 cell.
-
-    The first non-empty ring k is not enough: a profile in ring k+1 can be closer than
-    every profile in ring k, so both rings are compared.
-    """
     lat, lon = location.latitude, location.longitude
     cell = h3.latlng_to_cell(lat, lon, catalog.resolution)
     if not catalog.in_coverage(cell):

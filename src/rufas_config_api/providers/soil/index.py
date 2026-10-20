@@ -1,8 +1,3 @@
-"""Builds the SQLite soil catalog from ``data/soil/``.
-
-Run with ``python -m rufas_config_api.providers.soil.index``.
-"""
-
 import argparse
 import json
 import os

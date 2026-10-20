@@ -22,7 +22,6 @@ class CatalogProfile:
 
 
 class SoilCatalog:
-    """Read-only view of the SQLite soil catalog, safe to share across threads."""
 
     def __init__(self, connection: sqlite3.Connection) -> None:
         self._connection = connection
