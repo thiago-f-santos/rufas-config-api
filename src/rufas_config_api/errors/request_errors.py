@@ -14,3 +14,12 @@ class UnknownProviderError(RufasConfigError):
         self.unknown = list(unknown)
         self.available = list(available)
         super().__init__(f"Unknown input providers: {', '.join(self.unknown)}")
+
+
+class OutOfCoverageError(RufasConfigError):
+    def __init__(self, latitude: float, longitude: float, coverage: str) -> None:
+        self.latitude = latitude
+        self.longitude = longitude
+        self.coverage = coverage
+        self.message = f"Location is outside the soil catalog coverage ({coverage})"
+        super().__init__(self.message)

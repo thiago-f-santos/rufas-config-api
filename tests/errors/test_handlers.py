@@ -8,7 +8,9 @@ from rufas_config_api.errors import (
     InvalidPeriodError,
     MissingDataError,
     MissingValue,
+    OutOfCoverageError,
     RufasConfigError,
+    SoilCatalogError,
     UnknownProviderError,
     UpstreamError,
     UpstreamTimeoutError,
@@ -46,7 +48,18 @@ def client_raising(error: Exception) -> TestClient:
             504,
             {"message": "NASA POWER did not respond within 60.0 seconds", "timeout_seconds": 60.0},
         ),
+        (
+            OutOfCoverageError(-12.97, -38.5, "GO+DF"),
+            422,
+            {
+                "message": "Location is outside the soil catalog coverage (GO+DF)",
+                "latitude": -12.97,
+                "longitude": -38.5,
+                "coverage": "GO+DF",
+            },
+        ),
         (RufasConfigError("unexpected"), 500, "Internal error while generating inputs"),
+        (SoilCatalogError("x"), 500, "Internal error while generating inputs"),
     ],
 )
 def test_domain_errors_are_translated_to_http(error, status_code, detail):
