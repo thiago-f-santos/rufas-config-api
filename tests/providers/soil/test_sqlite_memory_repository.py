@@ -185,6 +185,29 @@ async def test_sqlite_memory_remapping_cell(repo):
 
 
 @pytest.mark.asyncio
+async def test_sqlite_memory_unmap_cell(repo):
+    p = SoilProfileDomain(
+        id="p_unmap",
+        name="P Unmap",
+        latitude=-16.0,
+        longitude=-48.0,
+        h3_cell="cell_unmap",
+        soil_data={},
+        provenance={},
+    )
+    await repo.save_profile(p)
+    await repo.map_cell_to_profile("cell_unmap", "p_unmap")
+    assert (await repo.get_profile_by_cell("cell_unmap")) is not None
+
+    unmapped = await repo.unmap_cell_from_profile("cell_unmap", "p_unmap")
+    assert unmapped is True
+    assert (await repo.get_profile_by_cell("cell_unmap")) is None
+
+    # Unmapping non-existent mapping returns False
+    assert await repo.unmap_cell_from_profile("cell_unmap", "p_unmap") is False
+
+
+@pytest.mark.asyncio
 async def test_sqlite_memory_protocol_conformance(repo):
     assert isinstance(repo, SoilRepository)
 

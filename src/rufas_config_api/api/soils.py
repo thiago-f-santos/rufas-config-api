@@ -21,6 +21,13 @@ async def create_soil_profile(
     body: SoilProfileCreateRequest,
     repo: SoilRepositoryDep,
 ) -> SoilProfileResponse:
+    existing = await repo.get_profile_by_id(body.id)
+    if existing is not None:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=f"Soil profile with id '{body.id}' already exists",
+        )
+
     h3_cell = h3.latlng_to_cell(body.latitude, body.longitude, 6)
     profile = SoilProfileDomain(
         id=body.id,
@@ -97,6 +104,8 @@ async def update_soil_profile(
 
     if body.latitude is not None or body.longitude is not None:
         new_h3_cell = h3.latlng_to_cell(new_lat, new_lon, 6)
+        if new_h3_cell != existing.h3_cell:
+            await repo.unmap_cell_from_profile(existing.h3_cell, id)
         await repo.map_cell_to_profile(new_h3_cell, id)
     else:
         new_h3_cell = existing.h3_cell

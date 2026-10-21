@@ -149,6 +149,19 @@ def test_postgres_repository_map_cell_query_compilation():
     assert "excluded.profile_id" in compiled
 
 
+def test_postgres_repository_unmap_cell_query_compilation():
+    """Verify delete statement compilation for unmap_cell_from_profile."""
+    mock_factory = MagicMock(spec=async_sessionmaker)
+    repo = PostgresSoilRepository(mock_factory)
+
+    stmt = repo._build_unmap_cell_statement(h3_cell="868261977ffffff", profile_id="test_p1")
+    compiled = str(stmt.compile(dialect=postgresql.dialect()))
+
+    assert "DELETE FROM soil_cell_mappings" in compiled
+    assert "soil_cell_mappings.h3_cell =" in compiled
+    assert "soil_cell_mappings.profile_id =" in compiled
+
+
 def test_postgres_repository_add_coverage_query_compilation():
     """Verify insert on conflict do nothing compilation for add_coverage_cells."""
     mock_factory = MagicMock(spec=async_sessionmaker)
@@ -241,7 +254,18 @@ async def test_postgres_repository_mock_crud():
     await repo.map_cell_to_profile("868261977ffffff", "p1")
     mock_session.commit.assert_awaited()
 
-    # 7. delete_profile
+    # 7. unmap_cell_from_profile
+    mock_unmap_result = MagicMock()
+    mock_unmap_result.rowcount = 1
+    mock_session.execute.return_value = mock_unmap_result
+    unmapped = await repo.unmap_cell_from_profile("868261977ffffff", "p1")
+    assert unmapped is True
+
+    mock_unmap_result.rowcount = 0
+    not_unmapped = await repo.unmap_cell_from_profile("unknown_cell", "p1")
+    assert not_unmapped is False
+
+    # 8. delete_profile
     mock_delete_result = MagicMock()
     mock_delete_result.rowcount = 1
     mock_session.execute.return_value = mock_delete_result
@@ -252,7 +276,7 @@ async def test_postgres_repository_mock_crud():
     not_deleted = await repo.delete_profile("p_unknown")
     assert not_deleted is False
 
-    # 8. add_coverage_cells
+    # 9. add_coverage_cells
     await repo.add_coverage_cells(["c1", "c2"], region="GO_DF")
     mock_session.commit.assert_awaited()
 
@@ -330,7 +354,14 @@ async def test_postgres_repository_integration_full_lifecycle(pg_session_factory
     too_far = await repo.find_nearest(-16.55, -49.25, max_distance_km=1.0)
     assert too_far is None
 
-    # 5. Cascade delete
+    # 5. Unmap cell
+    await repo.map_cell_to_profile("cell_temp", "pg_life_01")
+    assert await repo.get_profile_by_cell("cell_temp") is not None
+    unmapped = await repo.unmap_cell_from_profile("cell_temp", "pg_life_01")
+    assert unmapped is True
+    assert await repo.get_profile_by_cell("cell_temp") is None
+
+    # 6. Cascade delete
     deleted = await repo.delete_profile("pg_life_01")
     assert deleted is True
     assert await repo.get_profile_by_id("pg_life_01") is None

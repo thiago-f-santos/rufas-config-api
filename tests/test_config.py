@@ -8,6 +8,9 @@ ENV_NAMES = (
     "NASA_POWER_LAG_DAYS",
     "SOIL_CATALOG_PATH",
     "SOIL_MAX_RINGS",
+    "DATABASE_URL",
+    "SOIL_MAX_DISTANCE_KM",
+    "SOIL_WARNING_DISTANCE_KM",
 )
 
 
@@ -48,8 +51,9 @@ def test_values_are_read_from_environment(monkeypatch):
     assert settings.soil_max_rings == 12
 
 
-def test_soil_database_settings_defaults():
-    from rufas_config_api.config import Settings
+def test_soil_database_settings_defaults(monkeypatch):
+    for name in ENV_NAMES:
+        monkeypatch.delenv(name, raising=False)
 
     settings = Settings()
     assert (

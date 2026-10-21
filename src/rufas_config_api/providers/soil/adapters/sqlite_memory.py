@@ -197,6 +197,18 @@ class SqliteMemorySoilRepository:
 
         await asyncio.to_thread(_run)
 
+    async def unmap_cell_from_profile(self, h3_cell: str, profile_id: str) -> bool:
+        def _run() -> bool:
+            with self._lock:
+                cur = self._conn.execute(
+                    "DELETE FROM soil_cell_mappings WHERE h3_cell = ? AND profile_id = ?",
+                    (h3_cell, profile_id),
+                )
+                self._conn.commit()
+                return cur.rowcount > 0
+
+        return await asyncio.to_thread(_run)
+
     async def delete_profile(self, profile_id: str) -> bool:
         def _run() -> bool:
             with self._lock:

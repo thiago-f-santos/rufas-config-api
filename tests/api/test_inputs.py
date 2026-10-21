@@ -152,10 +152,10 @@ def test_soil_outside_coverage_is_rejected(client):
     assert response.status_code == 422
     assert response.json() == {
         "detail": {
-            "message": "Location is outside the soil catalog coverage (GO_DF)",
+            "message": "Location is outside the soil catalog coverage (GO+DF)",
             "latitude": -12.97,
             "longitude": -38.5,
-            "coverage": "GO_DF",
+            "coverage": "GO+DF",
         }
     }
 

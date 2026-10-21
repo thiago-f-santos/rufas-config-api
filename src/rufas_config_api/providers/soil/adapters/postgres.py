@@ -1,6 +1,6 @@
 from typing import Any, Self
 
-from sqlalchemy import delete, func, select
+from sqlalchemy import Delete, delete, func, select
 from sqlalchemy.dialects.postgresql import Insert, insert
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 from sqlalchemy.sql import Select
@@ -98,6 +98,12 @@ class PostgresSoilRepository:
             set_={"profile_id": insert_stmt.excluded.profile_id},
         )
 
+    def _build_unmap_cell_statement(self, h3_cell: str, profile_id: str) -> Delete:
+        return delete(SoilCellMappingModel).where(
+            SoilCellMappingModel.h3_cell == h3_cell,
+            SoilCellMappingModel.profile_id == profile_id,
+        )
+
     def _build_add_coverage_statement(self, cells: list[str], region: str) -> Insert | None:
         if not cells:
             return None
@@ -160,6 +166,13 @@ class PostgresSoilRepository:
         async with self._session_factory() as session:
             await session.execute(stmt)
             await session.commit()
+
+    async def unmap_cell_from_profile(self, h3_cell: str, profile_id: str) -> bool:
+        stmt = self._build_unmap_cell_statement(h3_cell, profile_id)
+        async with self._session_factory() as session:
+            result = await session.execute(stmt)
+            await session.commit()
+            return (result.rowcount or 0) > 0
 
     async def delete_profile(self, profile_id: str) -> bool:
         stmt = delete(SoilProfileModel).where(SoilProfileModel.id == profile_id)

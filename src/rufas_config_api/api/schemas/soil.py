@@ -7,9 +7,9 @@ class SoilLayerSchema(BaseModel):
     model_config = ConfigDict(extra="allow")
 
     bottom_depth: float
-    clay_fraction: float
-    silt_fraction: float
-    sand_fraction: float
+    clay_fraction: float = Field(ge=0.0, le=1.0)
+    silt_fraction: float = Field(ge=0.0, le=1.0)
+    sand_fraction: float = Field(ge=0.0, le=1.0)
     bulk_density: float
     saturated_hydraulic_conductivity: float
     wilting_point_water_concentration: float
@@ -44,8 +44,8 @@ class SoilDataSchema(BaseModel):
 
 
 class SoilProfileCreateRequest(BaseModel):
-    id: str
-    name: str
+    id: str = Field(min_length=1)
+    name: str = Field(min_length=1)
     latitude: float = Field(ge=-90, le=90)
     longitude: float = Field(ge=-180, le=180)
     soil_data: SoilDataSchema

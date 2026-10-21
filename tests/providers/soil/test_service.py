@@ -47,7 +47,7 @@ async def test_out_of_coverage(service: SoilService):
         await service.resolve_soil(Location(-12.97, -38.50))  # Salvador, BA
     assert exc_info.value.latitude == -12.97
     assert exc_info.value.longitude == -38.50
-    assert exc_info.value.coverage == "GO_DF"
+    assert exc_info.value.coverage == "GO+DF"
 
 
 @pytest.mark.asyncio

@@ -14,11 +14,13 @@ class SoilService:
         max_distance_km: float = 300.0,
         warning_distance_km: float = 50.0,
         resolution: int = 6,
+        region: str = "GO+DF",
     ) -> None:
         self._repo = repo
         self._max_distance_km = max_distance_km
         self._warning_distance_km = warning_distance_km
         self._resolution = resolution
+        self._region = region
 
     @property
     def repo(self) -> SoilRepository:
@@ -36,6 +38,10 @@ class SoilService:
     def resolution(self) -> int:
         return self._resolution
 
+    @property
+    def region(self) -> str:
+        return self._region
+
     async def resolve_soil(self, location: Location) -> SoilMatch:
         """Resolve a soil profile for a given location using two-tier search.
 
@@ -47,7 +53,7 @@ class SoilService:
         cell = h3.latlng_to_cell(location.latitude, location.longitude, self._resolution)
 
         if not await self._repo.is_in_coverage(cell):
-            raise OutOfCoverageError(location.latitude, location.longitude, "GO_DF")
+            raise OutOfCoverageError(location.latitude, location.longitude, self._region)
 
         exact_profile = await self._repo.get_profile_by_cell(cell)
         if exact_profile is not None:

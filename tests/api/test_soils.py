@@ -232,3 +232,65 @@ def test_delete_soil_profile_success(client):
 def test_delete_soil_profile_not_found(client):
     response = client.delete("/soils/profiles/non_existent_profile")
     assert response.status_code == 404
+
+
+@pytest.mark.asyncio
+async def test_update_soil_profile_coordinates_unmaps_old_cell(client, test_app):
+    repo = test_app.state.soil_repository
+    payload = _valid_soil_payload("move_test_farm", latitude=-16.50, longitude=-49.30)
+    res = client.post("/soils/profiles", json=payload)
+    assert res.status_code == 201
+
+    old_cell = res.json()["h3_cell"]
+    assert await repo.get_profile_by_cell(old_cell) is not None
+
+    update_payload = {
+        "latitude": -17.80,
+        "longitude": -50.90,
+    }
+    update_res = client.put("/soils/profiles/move_test_farm", json=update_payload)
+    assert update_res.status_code == 200
+
+    new_cell = update_res.json()["h3_cell"]
+    assert new_cell != old_cell
+
+    # Querying the old cell via get_profile_by_cell returns None
+    assert await repo.get_profile_by_cell(old_cell) is None
+
+    # Querying the new cell returns the profile
+    new_match = await repo.get_profile_by_cell(new_cell)
+    assert new_match is not None
+    assert new_match.id == "move_test_farm"
+
+
+def test_create_soil_profile_duplicate_id_returns_409(client):
+    payload = _valid_soil_payload("conflict_farm_01")
+    res1 = client.post("/soils/profiles", json=payload)
+    assert res1.status_code == 201
+
+    res2 = client.post("/soils/profiles", json=payload)
+    assert res2.status_code == 409
+    assert res2.json()["detail"] == "Soil profile with id 'conflict_farm_01' already exists"
+
+
+def test_create_soil_profile_validation_error_empty_id_or_name(client):
+    payload_empty_id = _valid_soil_payload("")
+    res1 = client.post("/soils/profiles", json=payload_empty_id)
+    assert res1.status_code == 422
+
+    payload_empty_name = _valid_soil_payload("valid_id")
+    payload_empty_name["name"] = ""
+    res2 = client.post("/soils/profiles", json=payload_empty_name)
+    assert res2.status_code == 422
+
+
+def test_create_soil_profile_validation_error_fractions_range(client):
+    payload_neg = _valid_soil_payload("neg_fraction")
+    payload_neg["soil_data"]["soil_layers"][0]["clay_fraction"] = -0.1
+    res1 = client.post("/soils/profiles", json=payload_neg)
+    assert res1.status_code == 422
+
+    payload_gt1 = _valid_soil_payload("gt1_fraction")
+    payload_gt1["soil_data"]["soil_layers"][0]["clay_fraction"] = 1.1
+    res2 = client.post("/soils/profiles", json=payload_gt1)
+    assert res2.status_code == 422
