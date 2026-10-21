@@ -5,10 +5,14 @@ description = "Generates RuFaS simulation inputs from geographic coordinates."
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
+    "alembic>=1.14",
+    "asyncpg>=0.30",
     "fastapi>=0.115",
+    "geoalchemy2>=0.17",
     "h3>=4.5",
     "httpx>=0.28",
     "pydantic-settings>=2.6",
+    "sqlalchemy[asyncio]>=2.0",
     "uvicorn[standard]>=0.32",
 ]
 

@@ -46,3 +46,27 @@ def test_values_are_read_from_environment(monkeypatch):
     assert settings.nasa_power_lag_days == 3
     assert settings.soil_catalog_path == Path("/tmp/catalog.sqlite")
     assert settings.soil_max_rings == 12
+
+
+def test_soil_database_settings_defaults():
+    from rufas_config_api.config import Settings
+
+    settings = Settings()
+    assert (
+        settings.database_url
+        == "postgresql+asyncpg://postgres:postgres@localhost:5432/rufas_config"
+    )
+    assert settings.soil_max_distance_km == 300.0
+    assert settings.soil_warning_distance_km == 50.0
+
+
+def test_soil_database_settings_env(monkeypatch):
+    monkeypatch.setenv("DATABASE_URL", "postgresql+asyncpg://user:pass@localhost:5432/custom_db")
+    monkeypatch.setenv("SOIL_MAX_DISTANCE_KM", "150.0")
+    monkeypatch.setenv("SOIL_WARNING_DISTANCE_KM", "25.0")
+
+    settings = Settings()
+
+    assert settings.database_url == "postgresql+asyncpg://user:pass@localhost:5432/custom_db"
+    assert settings.soil_max_distance_km == 150.0
+    assert settings.soil_warning_distance_km == 25.0
