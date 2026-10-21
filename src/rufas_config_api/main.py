@@ -1,5 +1,4 @@
 import json
-import os
 import sqlite3
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
@@ -54,18 +53,19 @@ async def _populate_memory_repo_from_catalog(
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     settings: Settings = app.state.settings
-    soil_catalog = SoilCatalog.open(settings.soil_catalog_path)
+    soil_catalog = (
+        SoilCatalog.open(settings.soil_catalog_path)
+        if settings.soil_catalog_path.is_file()
+        else None
+    )
     engine = None
     repo = None
 
     if not hasattr(app.state, "soil_service") or app.state.soil_service is None:
-        is_test = (
-            "PYTEST_CURRENT_TEST" in os.environ
-            or os.environ.get("TESTING") == "1"
-            or settings.database_url.startswith("sqlite")
-            or settings.database_url == ":memory:"
+        use_sqlite = (
+            settings.database_url.startswith("sqlite") or settings.database_url == ":memory:"
         )
-        if is_test:
+        if use_sqlite:
             repo = SqliteMemorySoilRepository()
             repo.init_db()
             await _populate_memory_repo_from_catalog(repo, settings.soil_catalog_path)
@@ -94,7 +94,8 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             app.state.http_client = http_client
             yield
     finally:
-        soil_catalog.close()
+        if soil_catalog is not None:
+            soil_catalog.close()
         if repo is not None and hasattr(repo, "close"):
             repo.close()
         if engine is not None:

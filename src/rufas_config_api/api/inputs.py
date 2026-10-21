@@ -48,9 +48,7 @@ async def get_inputs(
         )
         filename = f"rufas_inputs_{latitude}_{longitude}_{start_year}_{end_year}.zip"
     else:
-        period = Period.from_years(
-            today.year, today.year, today=today, lag_days=settings.nasa_power_lag_days
-        )
+        period = None
         filename = f"rufas_inputs_{latitude}_{longitude}.zip"
 
     results = await asyncio.gather(*(provider.build(location, period) for provider in providers))

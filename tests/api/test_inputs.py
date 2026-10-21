@@ -23,6 +23,7 @@ def client(respx_mock, soil_catalog_path):
         nasa_power_base_url=BASE_URL,
         nasa_timeout_seconds=5,
         soil_catalog_path=soil_catalog_path,
+        database_url="sqlite:///:memory:",
     )
     app = create_app(settings)
     app.dependency_overrides[get_today] = lambda: TODAY
@@ -102,6 +103,31 @@ def test_inputs_soil_only_does_not_require_years(client):
     response = client.get("/inputs?latitude=-17.49&longitude=-51.39&include=soil")
     assert response.status_code == 200
     assert response.headers["content-type"] == "application/zip"
+    assert (
+        response.headers["content-disposition"]
+        == 'attachment; filename="rufas_inputs_-17.49_-51.39.zip"'
+    )
+
+    files = read_zip(response)
+    provenance = json.loads(files["provenance.json"])
+    assert provenance["request"]["start_year"] is None
+    assert provenance["request"]["end_year"] is None
+
+
+def test_inputs_soil_only_early_january_does_not_fail(client):
+    client.app.dependency_overrides[get_today] = lambda: date(2026, 1, 2)
+    response = client.get("/inputs?latitude=-17.49&longitude=-51.39&include=soil")
+    assert response.status_code == 200
+    assert response.headers["content-type"] == "application/zip"
+    assert (
+        response.headers["content-disposition"]
+        == 'attachment; filename="rufas_inputs_-17.49_-51.39.zip"'
+    )
+
+    files = read_zip(response)
+    provenance = json.loads(files["provenance.json"])
+    assert provenance["request"]["start_year"] is None
+    assert provenance["request"]["end_year"] is None
 
 
 def test_inputs_weather_requires_start_year_and_end_year(client):
