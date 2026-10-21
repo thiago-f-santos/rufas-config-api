@@ -54,6 +54,15 @@ def test_alembic_env_get_url_resolution(monkeypatch):
     monkeypatch.setattr(env_module, "config", cfg_empty)
     assert env_module.get_url() == Settings().database_url
 
+    # 3. When loading alembic.ini with DATABASE_URL set in env, it honors DATABASE_URL
+    custom_env_url = "postgresql+asyncpg://remote_user:remote_pw@db_host:5432/rufas_prod"
+    monkeypatch.setenv("DATABASE_URL", custom_env_url)
+    alembic_ini = root_dir / "alembic.ini"
+    cfg_ini = Config(str(alembic_ini))
+    monkeypatch.setattr(context, "config", cfg_ini, raising=False)
+    monkeypatch.setattr(env_module, "config", cfg_ini)
+    assert env_module.get_url() == custom_env_url
+
 
 def test_migration_revision_chain():
     """Verify revision chain ('0001' -> '0002') and down_revision continuity."""
