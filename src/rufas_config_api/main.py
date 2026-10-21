@@ -9,7 +9,7 @@ from fastapi import FastAPI
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from rufas_config_api import __version__
-from rufas_config_api.api import health, inputs
+from rufas_config_api.api import health, inputs, soils
 from rufas_config_api.config import Settings
 from rufas_config_api.domain.soil import SoilProfileDomain
 from rufas_config_api.errors.handlers import register_error_handlers
@@ -108,6 +108,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     register_error_handlers(app)
     app.include_router(health.router)
     app.include_router(inputs.router)
+    app.include_router(soils.router)
     return app
 
 

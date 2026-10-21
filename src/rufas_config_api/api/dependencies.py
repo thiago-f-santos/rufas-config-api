@@ -10,6 +10,7 @@ from rufas_config_api.packaging import PackageBuilder
 from rufas_config_api.providers import ProviderRegistry
 from rufas_config_api.providers.soil import SoilProvider, SoilService
 from rufas_config_api.providers.soil.catalog import SoilCatalog
+from rufas_config_api.providers.soil.repository import SoilRepository
 from rufas_config_api.providers.weather import WeatherProvider
 from rufas_config_api.providers.weather.nasa_power import NasaPowerClient
 
@@ -30,6 +31,13 @@ def get_soil_catalog(request: Request) -> SoilCatalog | None:
     return getattr(request.app.state, "soil_catalog", None)
 
 
+def get_soil_repository(request: Request) -> SoilRepository:
+    soil_repo = getattr(request.app.state, "soil_repository", None)
+    if soil_repo is not None:
+        return soil_repo
+    return request.app.state.soil_service.repo
+
+
 def get_today() -> date:
     return date.today()
 
@@ -38,6 +46,7 @@ SettingsDep = Annotated[Settings, Depends(get_settings)]
 HttpClientDep = Annotated[httpx.AsyncClient, Depends(get_http_client)]
 SoilServiceDep = Annotated[SoilService, Depends(get_soil_service)]
 SoilCatalogDep = Annotated[SoilCatalog | None, Depends(get_soil_catalog)]
+SoilRepositoryDep = Annotated[SoilRepository, Depends(get_soil_repository)]
 TodayDep = Annotated[date, Depends(get_today)]
 
 
