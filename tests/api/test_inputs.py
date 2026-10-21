@@ -89,13 +89,33 @@ def test_soil_only(client, respx_mock, soil_data_dir):
     assert response.status_code == 200
     files = read_zip(response)
     assert sorted(files) == ["manifest.json", "provenance.json", "soil.json"]
-    assert (
-        files["soil.json"] == (soil_data_dir / "profiles" / "go_test_a" / "soil.json").read_bytes()
+    assert json.loads(files["soil.json"]) == json.loads(
+        (soil_data_dir / "profiles" / "go_test_a" / "soil.json").read_bytes()
     )
     provenance = json.loads(files["provenance.json"])
     assert provenance["request"]["include"] == ["soil"]
     assert provenance["providers"]["soil"]["profile_id"] == "go_test_a"
     assert respx_mock.calls.call_count == 0
+
+
+def test_inputs_soil_only_does_not_require_years(client):
+    response = client.get("/inputs?latitude=-17.49&longitude=-51.39&include=soil")
+    assert response.status_code == 200
+    assert response.headers["content-type"] == "application/zip"
+
+
+def test_inputs_weather_requires_start_year_and_end_year(client):
+    response = client.get("/inputs?latitude=-16.36&longitude=-49.49&include=weather")
+    assert response.status_code == 422
+    assert response.json() == {
+        "detail": "start_year and end_year are required when weather provider is included"
+    }
+
+    response_all = client.get("/inputs?latitude=-16.36&longitude=-49.49")
+    assert response_all.status_code == 422
+    assert response_all.json() == {
+        "detail": "start_year and end_year are required when weather provider is included"
+    }
 
 
 def test_soil_outside_coverage_is_rejected(client):
@@ -106,10 +126,10 @@ def test_soil_outside_coverage_is_rejected(client):
     assert response.status_code == 422
     assert response.json() == {
         "detail": {
-            "message": "Location is outside the soil catalog coverage (GO+DF)",
+            "message": "Location is outside the soil catalog coverage (GO_DF)",
             "latitude": -12.97,
             "longitude": -38.5,
-            "coverage": "GO+DF",
+            "coverage": "GO_DF",
         }
     }
 

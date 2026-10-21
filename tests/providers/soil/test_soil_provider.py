@@ -1,62 +1,80 @@
-from datetime import date
+import json
 
 import h3
 import pytest
 
-from rufas_config_api.domain import Location, Period
-from rufas_config_api.providers.soil import SoilProvider
-from rufas_config_api.providers.soil.catalog import SoilCatalog
+from rufas_config_api.domain import Location
+from rufas_config_api.domain.soil import SoilProfileDomain
+from rufas_config_api.providers.soil import SoilProvider, SoilService
+from rufas_config_api.providers.soil.adapters.sqlite_memory import SqliteMemorySoilRepository
 from rufas_config_api.providers.soil.search import haversine_km
 
 LOCATION = Location(-16.68, -49.25)
-PERIOD = Period(date(2020, 1, 1), date(2020, 12, 31), date(2020, 12, 31))
 
 
 @pytest.fixture
-def provider(soil_catalog_path):
-    catalog = SoilCatalog.open(soil_catalog_path)
-    yield SoilProvider(catalog, max_rings=80)
-    catalog.close()
+async def provider():
+    repo = SqliteMemorySoilRepository()
+    repo.init_db()
+    cell = h3.latlng_to_cell(-16.68, -49.25, 6)
+    await repo.add_coverage_cells([cell], region="GO_DF")
+    profile = SoilProfileDomain(
+        id="go_test_a",
+        name="Latossolo Teste",
+        latitude=-16.68,
+        longitude=-49.25,
+        h3_cell=cell,
+        soil_data={"_nota": "solo genérico", "profile_id": "go_test_a"},
+        provenance={"source": "test", "profile_id": "go_test_a"},
+    )
+    await repo.save_profile(profile)
+    await repo.map_cell_to_profile(cell, "go_test_a")
+    service = SoilService(repo, max_distance_km=300.0, warning_distance_km=50.0)
+    yield SoilProvider(service)
+    repo.close()
 
 
-async def test_returns_profile_soil_json_unchanged(provider, soil_data_dir):
-    result = await provider.build(LOCATION, PERIOD)
+@pytest.mark.asyncio
+async def test_returns_profile_soil_json(provider):
+    result = await provider.build(LOCATION)
 
     [soil_file] = result.files
-    expected = (soil_data_dir / "profiles" / "go_test_a" / "soil.json").read_bytes()
     assert result.provider == "soil"
     assert soil_file.path == "soil.json"
     assert soil_file.provider == "soil"
-    assert soil_file.content == expected
-    assert "solo genérico".encode() in soil_file.content
-    assert soil_file.content.endswith(b"}\n")
+    assert json.loads(soil_file.content) == {"_nota": "solo genérico", "profile_id": "go_test_a"}
 
 
+@pytest.mark.asyncio
 async def test_records_provenance(provider):
     cell = h3.latlng_to_cell(-16.68, -49.25, 6)
 
-    result = await provider.build(LOCATION, PERIOD)
+    result = await provider.build(LOCATION)
 
     assert result.provenance == {
-        "source": "rufas-config-api soil catalog",
-        "method": "h3_ring_nearest",
-        "h3": {"resolution": 6, "request_cell": cell, "profile_cell": cell, "ring": 0},
+        "source": "rufas-config-api dynamic soil database",
+        "match_type": "exact",
+        "h3": {"resolution": 6, "request_cell": cell, "profile_cell": cell},
         "profile_id": "go_test_a",
-        "profile_location": {"latitude": -16.68, "longitude": -49.25},
         "distance_km": 0.0,
-        "profile_provenance": {
-            "profile_id": "go_test_a",
-            "location": {"latitude": -16.68, "longitude": -49.25},
-        },
+        "warning": None,
+        "profile_provenance": {"source": "test", "profile_id": "go_test_a"},
     }
 
 
-async def test_records_rounded_distance_to_profile(provider):
-    location = Location(-16.66, -49.27)
+@pytest.mark.asyncio
+async def test_records_rounded_distance_and_fallback(provider):
+    # Location slightly away from profile cell, in an adjacent cell within coverage
+    location = Location(-16.55, -49.25)
+    req_cell = h3.latlng_to_cell(location.latitude, location.longitude, 6)
+    await provider._soil_service.repo.add_coverage_cells([req_cell], region="GO_DF")
 
-    result = await provider.build(location, PERIOD)
+    result = await provider.build(location)
 
     assert result.provenance["profile_id"] == "go_test_a"
+    assert result.provenance["match_type"] == "fallback_nearest"
     assert result.provenance["distance_km"] == round(
-        haversine_km(-16.66, -49.27, -16.68, -49.25), 3
+        haversine_km(-16.55, -49.25, -16.68, -49.25), 3
     )
+    assert result.provenance["h3"]["request_cell"] == req_cell
+    assert result.provenance["h3"]["profile_cell"] == h3.latlng_to_cell(-16.68, -49.25, 6)
