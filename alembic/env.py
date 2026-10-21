@@ -12,10 +12,13 @@ from rufas_config_api.providers.soil.models import Base
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
-config = context.config
+try:
+    config = context.config
+except AttributeError, NameError:
+    config = None
 
 # Interpret the config file for Python logging.
-if config.config_file_name is not None:
+if config is not None and config.config_file_name is not None:
     with contextlib.suppress(Exception):
         fileConfig(config.config_file_name)
 
@@ -25,6 +28,16 @@ target_metadata = Base.metadata
 
 
 def get_url() -> str:
+    """Return database URL from alembic config if set, otherwise from Settings."""
+    try:
+        active_config = context.config
+    except AttributeError, NameError:
+        active_config = config
+
+    if active_config is not None:
+        url = active_config.get_main_option("sqlalchemy.url")
+        if url:
+            return url
     settings = Settings()
     return settings.database_url
 
@@ -41,7 +54,16 @@ def run_migrations_offline() -> None:
     script output.
     """
     url = get_url()
-    output_buffer = getattr(config, "output_buffer", None) or getattr(config, "stdout", None)
+    try:
+        active_config = context.config
+    except AttributeError, NameError:
+        active_config = config
+
+    output_buffer = None
+    if active_config is not None:
+        output_buffer = getattr(active_config, "output_buffer", None) or getattr(
+            active_config, "stdout", None
+        )
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -65,7 +87,16 @@ async def run_async_migrations() -> None:
     """In this scenario we need to create an Engine
     and associate a connection with the context.
     """
-    configuration = config.get_section(config.config_ini_section, {})
+    try:
+        active_config = context.config
+    except AttributeError, NameError:
+        active_config = config
+
+    configuration = (
+        active_config.get_section(active_config.config_ini_section, {})
+        if active_config is not None
+        else {}
+    )
     configuration["sqlalchemy.url"] = get_url()
 
     connectable = async_engine_from_config(
@@ -85,7 +116,10 @@ def run_migrations_online() -> None:
     asyncio.run(run_async_migrations())
 
 
-if context.is_offline_mode():
-    run_migrations_offline()
-else:
-    run_migrations_online()
+try:
+    if context.is_offline_mode():
+        run_migrations_offline()
+    else:
+        run_migrations_online()
+except AttributeError, NameError:
+    pass

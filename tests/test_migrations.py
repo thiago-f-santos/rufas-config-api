@@ -1,3 +1,5 @@
+import asyncio
+import importlib.util
 import io
 import os
 from pathlib import Path
@@ -6,9 +8,10 @@ import h3
 import pytest
 from alembic.config import Config
 from alembic.script import ScriptDirectory
-from sqlalchemy import create_engine, text
+from sqlalchemy import text
+from sqlalchemy.ext.asyncio import create_async_engine
 
-from alembic import command
+from alembic import command, context
 from rufas_config_api.config import Settings
 
 
@@ -26,6 +29,30 @@ def test_alembic_configuration_files_exist():
     # Verify alembic.ini points to alembic directory
     config = Config(str(alembic_ini))
     assert config.get_main_option("script_location") == "alembic"
+
+
+def test_alembic_env_get_url_resolution(monkeypatch):
+    """Verify get_url honors config.get_main_option('sqlalchemy.url') before Settings()."""
+    root_dir = Path(__file__).resolve().parents[1]
+    env_py = root_dir / "alembic" / "env.py"
+
+    spec = importlib.util.spec_from_file_location("env_test_module", env_py)
+    assert spec is not None and spec.loader is not None
+    env_module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(env_module)
+
+    # 1. When config has sqlalchemy.url set, it takes precedence
+    cfg_with_url = Config()
+    cfg_with_url.set_main_option("sqlalchemy.url", "postgresql+asyncpg://custom:5432/custom_db")
+    monkeypatch.setattr(context, "config", cfg_with_url, raising=False)
+    monkeypatch.setattr(env_module, "config", cfg_with_url)
+    assert env_module.get_url() == "postgresql+asyncpg://custom:5432/custom_db"
+
+    # 2. When config has no sqlalchemy.url, falls back to Settings().database_url
+    cfg_empty = Config()
+    monkeypatch.setattr(context, "config", cfg_empty, raising=False)
+    monkeypatch.setattr(env_module, "config", cfg_empty)
+    assert env_module.get_url() == Settings().database_url
 
 
 def test_migration_revision_chain():
@@ -153,22 +180,27 @@ def test_migration_offline_sql_generation():
     assert "ST_MakePoint" in sql_text
 
 
+async def _check_postgres_alive(url: str) -> None:
+    engine = create_async_engine(url, echo=False)
+    async with engine.connect() as conn:
+        await conn.execute(text("SELECT 1;"))
+    await engine.dispose()
+
+
 @pytest.mark.integration
 def test_live_migration_execution():
     """Verify running real migrations against a live Postgres database."""
     settings = Settings()
     database_url = os.environ.get("DATABASE_URL", settings.database_url)
     try:
-        sync_url = database_url.replace("+asyncpg", "")
-        sync_engine = create_engine(sync_url)
-        with sync_engine.connect() as conn:
-            conn.execute(text("SELECT 1;"))
+        asyncio.run(_check_postgres_alive(database_url))
     except Exception as exc:
         pytest.skip(f"PostgreSQL/PostGIS not available: {exc}")
 
     root_dir = Path(__file__).resolve().parents[1]
     alembic_ini = root_dir / "alembic.ini"
     config = Config(str(alembic_ini))
+    config.set_main_option("sqlalchemy.url", database_url)
 
     # Test upgrade head and downgrade base
     command.upgrade(config, "head")
