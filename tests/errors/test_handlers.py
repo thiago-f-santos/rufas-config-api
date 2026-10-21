@@ -81,3 +81,27 @@ def test_missing_data_lists_days_and_variables():
             "missing": [{"date": "2026-09-30", "variables": ["T2M", "T2M_MAX"]}],
         }
     }
+
+
+def test_no_profile_in_range_returns_404():
+    from fastapi import FastAPI
+    from fastapi.testclient import TestClient
+
+    from rufas_config_api.errors.handlers import register_error_handlers
+    from rufas_config_api.errors.request_errors import NoProfileInRangeError
+
+    app = FastAPI()
+    register_error_handlers(app)
+
+    @app.get("/test-404")
+    def endpoint():
+        raise NoProfileInRangeError(-13.5, -46.5, 300.0)
+
+    client = TestClient(app)
+    response = client.get("/test-404")
+    assert response.status_code == 404
+    data = response.json()
+    assert data["detail"]["message"] == "No soil profile within maximum search radius"
+    assert data["detail"]["latitude"] == -13.5
+    assert data["detail"]["longitude"] == -46.5
+    assert data["detail"]["max_distance_km"] == 300.0

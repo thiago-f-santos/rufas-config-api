@@ -7,6 +7,7 @@ from rufas_config_api.errors.data_errors import (
 )
 from rufas_config_api.errors.request_errors import (
     InvalidPeriodError,
+    NoProfileInRangeError,
     OutOfCoverageError,
     UnknownProviderError,
 )
@@ -16,6 +17,7 @@ __all__ = [
     "InvalidPeriodError",
     "MissingDataError",
     "MissingValue",
+    "NoProfileInRangeError",
     "OutOfCoverageError",
     "RufasConfigError",
     "SoilCatalogError",

@@ -22,7 +22,6 @@ class CatalogProfile:
 
 
 class SoilCatalog:
-
     def __init__(self, connection: sqlite3.Connection) -> None:
         self._connection = connection
         self._lock = threading.Lock()
