@@ -25,8 +25,11 @@ def data_dir(soil_data_dir: Path, tmp_path: Path) -> Path:
 
 
 def read_rows(db_path: Path, query: str) -> list[tuple]:
-    with sqlite3.connect(db_path) as connection:
+    connection = sqlite3.connect(db_path)
+    try:
         return connection.execute(query).fetchall()
+    finally:
+        connection.close()
 
 
 def test_builds_every_profile(data_dir, tmp_path):

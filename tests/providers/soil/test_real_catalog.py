@@ -7,6 +7,7 @@ when the data is not there.
 import json
 from pathlib import Path
 
+import h3
 import pytest
 
 from rufas_config_api.domain import Location
@@ -15,7 +16,7 @@ from rufas_config_api.providers.soil.catalog import SoilCatalog
 from rufas_config_api.providers.soil.index import build_index
 from rufas_config_api.providers.soil.search import find_nearest
 
-DATA_DIR = Path("data/soil")
+DATA_DIR = Path("data/seeds/v0_initial_catalog")
 PROFILES_DIR = DATA_DIR / "profiles"
 MAX_RINGS = 80
 EXPECTED_PROFILES = 16
@@ -101,3 +102,29 @@ def test_salvador_is_outside_the_coverage(catalog):
 def _location_of(profile_id):
     provenance = json.loads((PROFILES_DIR / profile_id / "provenance.json").read_text("utf-8"))
     return provenance["location"]["latitude"], provenance["location"]["longitude"]
+
+
+@pytest.mark.asyncio
+async def test_seed_repository_loads_all_16_profiles(seed_soil_repository):
+    ids = sorted(path.name for path in PROFILES_DIR.iterdir() if path.is_dir())
+    assert len(ids) == EXPECTED_PROFILES
+    for profile_id in ids:
+        profile = await seed_soil_repository.get_profile_by_id(profile_id)
+        assert profile is not None
+        assert profile.id == profile_id
+        assert await seed_soil_repository.is_in_coverage(profile.h3_cell)
+
+
+@pytest.mark.asyncio
+async def test_seed_repository_nearest_rio_verde(seed_soil_repository):
+    match = await seed_soil_repository.find_nearest(-17.49, -51.39, max_distance_km=50.0)
+    assert match is not None
+    profile, dist = match
+    assert profile.id == "go_lv_muito_argilosa_01"
+    assert dist < 50
+
+
+@pytest.mark.asyncio
+async def test_seed_repository_out_of_coverage_salvador(seed_soil_repository):
+    salvador_cell = h3.latlng_to_cell(-12.97, -38.50, 6)
+    assert await seed_soil_repository.is_in_coverage(salvador_cell) is False

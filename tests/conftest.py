@@ -1,5 +1,5 @@
 import json
-from collections.abc import Callable, Iterable
+from collections.abc import AsyncIterator, Callable, Iterable
 from datetime import date, timedelta
 from pathlib import Path
 from typing import Any
@@ -7,6 +7,8 @@ from typing import Any
 import h3
 import pytest
 
+from rufas_config_api.main import _populate_memory_repo_from_catalog
+from rufas_config_api.providers.soil.adapters.sqlite_memory import SqliteMemorySoilRepository
 from rufas_config_api.providers.soil.index import build_index
 
 DEFAULT_VALUES = {
@@ -99,3 +101,51 @@ def soil_catalog_path(soil_data_dir: Path, tmp_path_factory: pytest.TempPathFact
     db_path = tmp_path_factory.mktemp("catalog") / "catalog.sqlite"
     build_index(soil_data_dir, db_path)
     return db_path
+
+
+V0_SEEDS_DIR = Path("data/seeds/v0_initial_catalog")
+
+
+@pytest.fixture(scope="session")
+def v0_seeds_dir() -> Path:
+    return V0_SEEDS_DIR
+
+
+@pytest.fixture(scope="session")
+def v0_soil_catalog_path(tmp_path_factory: pytest.TempPathFactory) -> Path:
+    db_path = tmp_path_factory.mktemp("catalog_v0") / "catalog.sqlite"
+    build_index(V0_SEEDS_DIR, db_path)
+    return db_path
+
+
+@pytest.fixture
+async def seed_soil_repository(
+    v0_soil_catalog_path: Path,
+) -> AsyncIterator[SqliteMemorySoilRepository]:
+    repo = SqliteMemorySoilRepository()
+    repo.init_db()
+    await _populate_memory_repo_from_catalog(repo, v0_soil_catalog_path)
+    try:
+        yield repo
+    finally:
+        repo.close()
+
+
+@pytest.fixture
+async def v0_soil_repository(
+    seed_soil_repository: SqliteMemorySoilRepository,
+) -> SqliteMemorySoilRepository:
+    return seed_soil_repository
+
+
+@pytest.fixture
+async def memory_soil_repository(
+    soil_catalog_path: Path,
+) -> AsyncIterator[SqliteMemorySoilRepository]:
+    repo = SqliteMemorySoilRepository()
+    repo.init_db()
+    await _populate_memory_repo_from_catalog(repo, soil_catalog_path)
+    try:
+        yield repo
+    finally:
+        repo.close()

@@ -24,7 +24,8 @@ async def _populate_memory_repo_from_catalog(
 ) -> None:
     if not catalog_path.is_file():
         return
-    with sqlite3.connect(f"{catalog_path.resolve().as_uri()}?mode=ro", uri=True) as conn:
+    conn = sqlite3.connect(f"{catalog_path.resolve().as_uri()}?mode=ro", uri=True)
+    try:
         meta_rows = dict(conn.execute("SELECT key, value FROM meta").fetchall())
         region = meta_rows.get("coverage_region", "GO_DF")
         coverage_rows = conn.execute("SELECT h3_cell FROM coverage").fetchall()
@@ -48,6 +49,8 @@ async def _populate_memory_repo_from_catalog(
             )
             await repo.save_profile(profile)
             await repo.map_cell_to_profile(cell, pid)
+    finally:
+        conn.close()
 
 
 @asynccontextmanager
