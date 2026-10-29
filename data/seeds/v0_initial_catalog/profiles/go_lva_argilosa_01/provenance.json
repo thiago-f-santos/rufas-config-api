@@ -1,0 +1,267 @@
+{
+    "profile_id": "go_lva_argilosa_01",
+    "location": {
+        "latitude": -13.93735,
+        "longitude": -50.333
+    },
+    "group": {
+        "classe": "LATOSSOLO VERMELHO-AMARELO",
+        "textura": "argilosa",
+        "unidade_ibge": "LVAd37",
+        "pct_area_agricola_grupo": 5.6
+    },
+    "point_type": "representativo_com_analogo",
+    "source_profile": {
+        "dataset": "Brazilian Soil Dataset 2024 v3",
+        "doi": "10.60502/SoilData/BCAV2B",
+        "file_md5": "cb99eb0908691a2e221ba56569da1041",
+        "dataset_id": "ctb0761",
+        "observacao_id": "102",
+        "taxon_original": "Latossolo Vermelho-Amarelo distrófico",
+        "classe_sibcs_convertida": "LATOSSOLO VERMELHO-AMARELO",
+        "licenca": "CC BY-NC 4.0",
+        "coord_precisao_m": 1000.0,
+        "latitude": -14.26667,
+        "longitude": -50.38333,
+        "distance_km": 37.02
+    },
+    "horizons_used": [
+        {
+            "profund_sup": 0.0,
+            "profund_inf": 12.0,
+            "argila": 297.0,
+            "silte": 147.0,
+            "areia": 556.0,
+            "areia_grossa": 288.0,
+            "areia_fina": 268.0,
+            "carbono": 11.0,
+            "ph": 5.1,
+            "dsi": null,
+            "agua_equivalente": null,
+            "fonte_fracoes_arenosas": "liv13268.pdf | https://biblioteca.ibge.gov.br/visualizacao/livros/liv13268.pdf | pagina 395 do PDF = p. 398 impressa (PERFIL N 102, Lab SUDESUL 08 172-08 177)",
+            "preenchido_do_boletim": []
+        },
+        {
+            "profund_sup": 12.0,
+            "profund_inf": 20.0,
+            "argila": 345.0,
+            "silte": 110.0,
+            "areia": 545.0,
+            "areia_grossa": 274.0,
+            "areia_fina": 271.0,
+            "carbono": 8.0,
+            "ph": 5.3,
+            "dsi": null,
+            "agua_equivalente": null,
+            "fonte_fracoes_arenosas": "liv13268.pdf | https://biblioteca.ibge.gov.br/visualizacao/livros/liv13268.pdf | pagina 395 do PDF = p. 398 impressa (PERFIL N 102, Lab SUDESUL 08 172-08 177)",
+            "preenchido_do_boletim": []
+        },
+        {
+            "profund_sup": 20.0,
+            "profund_inf": 45.0,
+            "argila": 386.0,
+            "silte": 101.0,
+            "areia": 513.0,
+            "areia_grossa": 253.0,
+            "areia_fina": 260.0,
+            "carbono": 4.0,
+            "ph": 5.4,
+            "dsi": null,
+            "agua_equivalente": null,
+            "fonte_fracoes_arenosas": "liv13268.pdf | https://biblioteca.ibge.gov.br/visualizacao/livros/liv13268.pdf | pagina 395 do PDF = p. 398 impressa (PERFIL N 102, Lab SUDESUL 08 172-08 177)",
+            "preenchido_do_boletim": []
+        },
+        {
+            "profund_sup": 45.0,
+            "profund_inf": 90.0,
+            "argila": 390.0,
+            "silte": 108.0,
+            "areia": 502.0,
+            "areia_grossa": 227.0,
+            "areia_fina": 275.0,
+            "carbono": 3.0,
+            "ph": 5.6,
+            "dsi": null,
+            "agua_equivalente": null,
+            "fonte_fracoes_arenosas": "liv13268.pdf | https://biblioteca.ibge.gov.br/visualizacao/livros/liv13268.pdf | pagina 395 do PDF = p. 398 impressa (PERFIL N 102, Lab SUDESUL 08 172-08 177)",
+            "preenchido_do_boletim": []
+        },
+        {
+            "profund_sup": 90.0,
+            "profund_inf": 140.0,
+            "argila": 400.0,
+            "silte": 105.0,
+            "areia": 495.0,
+            "areia_grossa": 221.0,
+            "areia_fina": 274.0,
+            "carbono": 2.0,
+            "ph": 5.7,
+            "dsi": null,
+            "agua_equivalente": null,
+            "fonte_fracoes_arenosas": "liv13268.pdf | https://biblioteca.ibge.gov.br/visualizacao/livros/liv13268.pdf | pagina 395 do PDF = p. 398 impressa (PERFIL N 102, Lab SUDESUL 08 172-08 177)",
+            "preenchido_do_boletim": []
+        },
+        {
+            "profund_sup": 140.0,
+            "profund_inf": 220.0,
+            "argila": 397.0,
+            "silte": 122.0,
+            "areia": 481.0,
+            "areia_grossa": 201.0,
+            "areia_fina": 280.0,
+            "carbono": 2.0,
+            "ph": 5.8,
+            "dsi": null,
+            "agua_equivalente": null,
+            "fonte_fracoes_arenosas": "liv13268.pdf | https://biblioteca.ibge.gov.br/visualizacao/livros/liv13268.pdf | pagina 395 do PDF = p. 398 impressa (PERFIL N 102, Lab SUDESUL 08 172-08 177)",
+            "preenchido_do_boletim": []
+        }
+    ],
+    "field_origins": {
+        "coarse_sand_fraction": {
+            "method": "boletim_original_transcrito",
+            "reference": "liv13268.pdf | https://biblioteca.ibge.gov.br/visualizacao/livros/liv13268.pdf | pagina 395 do PDF = p. 398 impressa (PERFIL N 102, Lab SUDESUL 08 172-08 177)"
+        },
+        "fine_sand_fraction": {
+            "method": "boletim_original_transcrito",
+            "reference": "liv13268.pdf | https://biblioteca.ibge.gov.br/visualizacao/livros/liv13268.pdf | pagina 395 do PDF = p. 398 impressa (PERFIL N 102, Lab SUDESUL 08 172-08 177)"
+        },
+        "moisture_equivalent": {
+            "method": "boletim_original_transcrito",
+            "reference": "liv13268.pdf | https://biblioteca.ibge.gov.br/visualizacao/livros/liv13268.pdf | pagina 395 do PDF = p. 398 impressa (PERFIL N 102, Lab SUDESUL 08 172-08 177)"
+        },
+        "clay_fraction": {
+            "method": "soildata_ponderado",
+            "reference": "10.60502/SoilData/BCAV2B"
+        },
+        "silt_fraction": {
+            "method": "soildata_ponderado",
+            "reference": "10.60502/SoilData/BCAV2B"
+        },
+        "sand_fraction": {
+            "method": "soildata_ponderado",
+            "reference": "10.60502/SoilData/BCAV2B"
+        },
+        "organic_carbon_fraction": {
+            "method": "soildata_ponderado",
+            "reference": "10.60502/SoilData/BCAV2B"
+        },
+        "pH": {
+            "method": "soildata_ponderado",
+            "reference": "10.60502/SoilData/BCAV2B"
+        },
+        "rock_fraction": {
+            "method": "soildata_ponderado",
+            "reference": "10.60502/SoilData/BCAV2B"
+        },
+        "bulk_density": {
+            "method": "ptf",
+            "reference": "Benites, V.M.; Machado, P.L.O.A.; Fidalgo, E.C.C.; Coelho, M.R.; Madari, B.E. (2007). Pedotransfer functions for estimating soil bulk density from existing soil survey reports in Brazil. Geoderma 139:90-97, Table 5, model 6. doi:10.1016/j.geoderma.2007.01.005",
+            "valor_ptf_original_por_camada": [
+                1.3213,
+                1.3226333333333333,
+                1.342425,
+                1.3496333333333335
+            ],
+            "valor_gravado_por_camada": [
+                1.3213,
+                1.3226333333333333,
+                1.342425,
+                1.3496333333333335
+            ],
+            "truncado_no_limite_do_schema": [
+                false,
+                false,
+                false,
+                false
+            ]
+        },
+        "wilting_point_water_concentration": {
+            "method": "ptf_tomasella_nivel_4",
+            "reference": "Tomasella, J.; Hodnett, M.G.; Rossato, L. (2000). Pedotransfer functions for the estimation of soil water retention in Brazilian soils. Soil Science Society of America Journal 64:327-338, Tables 7 and 8 (Step 4), levels 1 to 4, with the van Genuchten (1980) equation. doi:10.2136/sssaj2000.641327x"
+        },
+        "field_capacity_water_concentration": {
+            "method": "ptf_tomasella_nivel_4",
+            "reference": "Tomasella, J.; Hodnett, M.G.; Rossato, L. (2000). Pedotransfer functions for the estimation of soil water retention in Brazilian soils. Soil Science Society of America Journal 64:327-338, Tables 7 and 8 (Step 4), levels 1 to 4, with the van Genuchten (1980) equation. doi:10.2136/sssaj2000.641327x"
+        },
+        "saturation_point_water_concentration": {
+            "method": "1 - bulk_density / 2.65",
+            "reference": "Saturation point = 1 - bulk density / 2.65, the particle density convention used by the design spec (section 6.2) and by Saxton and Rawls (2006), Eq. [6] and [8]. doi:10.2136/sssaj2005.0117"
+        },
+        "saturated_hydraulic_conductivity": {
+            "method": "veloso_2024_tabela_13_2_log10_ds_theta1500",
+            "reference": "Veloso, M.F.; Rodrigues, L.N.; Ottoni, M.V. (2024). Capitulo 13: Funcoes de Pedotransferencia para a Estimativa de Parametros Fisico-Hidricos do Solo do Bioma Cerrado, em Agricultura irrigada no Cerrado: subsidios para o desenvolvimento sustentavel (Servico Geologico do Brasil). Tabela 13.2, equacao log(ks) = 3,798054 - 7,860309 log(Ds) - 5,236486 theta1500 (Ks em mm/h, Ds em g/cm3, theta1500 em m3/m3). Fonte original: Veloso (2021), dissertacao UFV, locus.ufv.br/handle/123456789/29891. Base do logaritmo nao declarada no texto; adotada log10 (ver docs/equacoes.md).",
+            "entradas": "densidade gravada e ponto de murcha de Tomasella (mesma camada)",
+            "comparacao_saxton_rawls_mm_h_por_camada": [
+                17.1,
+                14.17,
+                6.08,
+                5.14
+            ],
+            "nota_comparacao": "Saxton e Rawls (2006) so para comparacao; nao entra no soil.json. Diverge das medicoes de Latossolo do Cerrado (dezenas a centenas de mm/h)."
+        },
+        "second_moisture_condition_parameter": {
+            "method": "grupo_hidrologico_A_pastagem",
+            "reference": "Sartori, A.; Lombardi Neto, F.; Genovez, A.M. (2005). Classificacao hidrologica de solos brasileiros para a estimativa da chuva excedente com o metodo do Servico de Conservacao do Solo dos Estados Unidos. Revista Brasileira de Recursos Hidricos 10(4), Parte 1 (grupos hidrologicos, p. 11-12) e Parte 2 (Tabela 3, TR-55 1986, pastagem em condicao media). Sem doi; ISSN 2318-0331"
+        },
+        "initial_temperature": {
+            "method": "nasa_power_climatology_T2M_ANN",
+            "reference": "https://power.larc.nasa.gov/"
+        },
+        "soil_water_concentration": {
+            "method": "igual a field_capacity_water_concentration",
+            "reference": "design spec, secao 6.2"
+        }
+    },
+    "equations": [
+        {
+            "name": "bulk_density",
+            "version": "publicada",
+            "reference": "Benites, V.M.; Machado, P.L.O.A.; Fidalgo, E.C.C.; Coelho, M.R.; Madari, B.E. (2007). Pedotransfer functions for estimating soil bulk density from existing soil survey reports in Brazil. Geoderma 139:90-97, Table 5, model 6. doi:10.1016/j.geoderma.2007.01.005"
+        },
+        {
+            "name": "water_retention",
+            "version": "publicada",
+            "reference": "Tomasella, J.; Hodnett, M.G.; Rossato, L. (2000). Pedotransfer functions for the estimation of soil water retention in Brazilian soils. Soil Science Society of America Journal 64:327-338, Tables 7 and 8 (Step 4), levels 1 to 4, with the van Genuchten (1980) equation. doi:10.2136/sssaj2000.641327x"
+        },
+        {
+            "name": "saturated_conductivity",
+            "version": "publicada",
+            "reference": "Veloso, M.F.; Rodrigues, L.N.; Ottoni, M.V. (2024). Capitulo 13: Funcoes de Pedotransferencia para a Estimativa de Parametros Fisico-Hidricos do Solo do Bioma Cerrado, em Agricultura irrigada no Cerrado: subsidios para o desenvolvimento sustentavel (Servico Geologico do Brasil). Tabela 13.2, equacao log(ks) = 3,798054 - 7,860309 log(Ds) - 5,236486 theta1500 (Ks em mm/h, Ds em g/cm3, theta1500 em m3/m3). Fonte original: Veloso (2021), dissertacao UFV, locus.ufv.br/handle/123456789/29891. Base do logaritmo nao declarada no texto; adotada log10 (ver docs/equacoes.md)."
+        },
+        {
+            "name": "saturated_conductivity_saxton",
+            "version": "publicada",
+            "reference": "Saxton, K.E.; Rawls, W.J. (2006). Soil water characteristic estimates by texture and organic matter for hydrologic solutions. Soil Science Society of America Journal 70:1569-1578, Table 1, Eq. [1]-[10] and [14]-[18]. doi:10.2136/sssaj2005.0117. Usada apenas como comparacao na proveniencia."
+        },
+        {
+            "name": "curve_number",
+            "version": "publicada",
+            "reference": "Sartori, A.; Lombardi Neto, F.; Genovez, A.M. (2005). Classificacao hidrologica de solos brasileiros para a estimativa da chuva excedente com o metodo do Servico de Conservacao do Solo dos Estados Unidos. Revista Brasileira de Recursos Hidricos 10(4), Parte 1 (grupos hidrologicos, p. 11-12) e Parte 2 (Tabela 3, TR-55 1986, pastagem em condicao media). Sem doi; ISSN 2318-0331"
+        },
+        {
+            "name": "saturation",
+            "version": "publicada",
+            "reference": "Saturation point = 1 - bulk density / 2.65, the particle density convention used by the design spec (section 6.2) and by Saxton and Rawls (2006), Eq. [6] and [8]. doi:10.2136/sssaj2005.0117"
+        }
+    ],
+    "pilot_defaults": {
+        "average_subbasin_slope": 0.05,
+        "slope_length": 50,
+        "manning_roughness_coefficient": 0.4,
+        "support_practice_factor": 0.08,
+        "albedo": 0.16,
+        "soil_evaporation_compensation_coefficient": 0.95,
+        "initial_residue": 0.0,
+        "denitrification_rate_coefficient": 1.4,
+        "denitrification_threshold_water_content": 1.0,
+        "residue_fresh_organic_mineralization_rate": 0.05,
+        "humus_mineralization_rate_factor": 0.003,
+        "initial_fresh_organic_phosphorus_concentration": 0.0,
+        "ammonium_volatilization_cation_exchange_factor": 0.45
+    },
+    "warnings": [
+        "horizonte 140-220 cm do SoilData; o boletim transcreve base 200 cm (mantida a base do SoilData)"
+    ],
+    "built_at": "2026-10-20"
+}

@@ -8,3 +8,5 @@ htmlcov/
 .env
 dist/
 .superpowers/
+*.sqlite
+*.sqlite.tmp

@@ -8,6 +8,8 @@ from fastapi.responses import JSONResponse
 from rufas_config_api.errors import (
     InvalidPeriodError,
     MissingDataError,
+    NoProfileInRangeError,
+    OutOfCoverageError,
     RufasConfigError,
     UnknownProviderError,
     UpstreamError,
@@ -20,6 +22,8 @@ logger = logging.getLogger(__name__)
 def register_error_handlers(app: FastAPI) -> None:
     app.add_exception_handler(InvalidPeriodError, _handle_invalid_period)
     app.add_exception_handler(UnknownProviderError, _handle_unknown_provider)
+    app.add_exception_handler(OutOfCoverageError, _handle_out_of_coverage)
+    app.add_exception_handler(NoProfileInRangeError, _handle_no_profile_in_range)
     app.add_exception_handler(MissingDataError, _handle_missing_data)
     app.add_exception_handler(UpstreamTimeoutError, _handle_upstream_timeout)
     app.add_exception_handler(UpstreamError, _handle_upstream_error)
@@ -38,6 +42,30 @@ async def _handle_unknown_provider(_: Request, error: UnknownProviderError) -> J
     return _error_response(
         HTTPStatus.UNPROCESSABLE_CONTENT,
         {"unknown": error.unknown, "available": error.available},
+    )
+
+
+async def _handle_out_of_coverage(_: Request, error: OutOfCoverageError) -> JSONResponse:
+    return _error_response(
+        HTTPStatus.UNPROCESSABLE_CONTENT,
+        {
+            "message": error.message,
+            "latitude": error.latitude,
+            "longitude": error.longitude,
+            "coverage": error.coverage,
+        },
+    )
+
+
+async def _handle_no_profile_in_range(_: Request, error: NoProfileInRangeError) -> JSONResponse:
+    return _error_response(
+        HTTPStatus.NOT_FOUND,
+        {
+            "message": "No soil profile within maximum search radius",
+            "latitude": error.latitude,
+            "longitude": error.longitude,
+            "max_distance_km": error.max_distance_km,
+        },
     )
 
 

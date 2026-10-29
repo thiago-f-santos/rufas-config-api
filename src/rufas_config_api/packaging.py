@@ -19,7 +19,12 @@ class PackageBuilder:
         self._service_version = service_version
         self._clock = clock
 
-    def build(self, results: Sequence[ProviderResult], location: Location, period: Period) -> bytes:
+    def build(
+        self,
+        results: Sequence[ProviderResult],
+        location: Location,
+        period: Period | None = None,
+    ) -> bytes:
         generated_at = self._clock().isoformat()
         provider_files = [file for result in results for file in result.files]
         provenance = PackageFile(
@@ -33,7 +38,7 @@ class PackageBuilder:
         self,
         results: Sequence[ProviderResult],
         location: Location,
-        period: Period,
+        period: Period | None,
         generated_at: str,
     ) -> dict[str, Any]:
         return {
@@ -42,8 +47,8 @@ class PackageBuilder:
             "request": {
                 "latitude": location.latitude,
                 "longitude": location.longitude,
-                "start_year": period.start.year,
-                "end_year": period.requested_end.year,
+                "start_year": period.start.year if period is not None else None,
+                "end_year": period.requested_end.year if period is not None else None,
                 "include": [result.provider for result in results],
             },
             "providers": {result.provider: dict(result.provenance) for result in results},

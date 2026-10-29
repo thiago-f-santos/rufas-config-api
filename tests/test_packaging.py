@@ -57,3 +57,13 @@ def test_provenance_echoes_request_and_provider_blocks():
         },
         "providers": {"weather": {"source": "NASA POWER"}},
     }
+
+
+def test_provenance_handles_none_period():
+    builder = PackageBuilder(service_version="0.1.0", clock=lambda: GENERATED_AT)
+    archive_bytes = builder.build([WEATHER], LOCATION, period=None)
+    with zipfile.ZipFile(io.BytesIO(archive_bytes)) as archive:
+        provenance = json.loads(archive.read("provenance.json"))
+
+    assert provenance["request"]["start_year"] is None
+    assert provenance["request"]["end_year"] is None

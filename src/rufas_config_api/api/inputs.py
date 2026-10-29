@@ -1,7 +1,7 @@
 import asyncio
 from typing import Annotated
 
-from fastapi import APIRouter, Query, Response
+from fastapi import APIRouter, HTTPException, Query, Response
 
 from rufas_config_api.api.dependencies import (
     PackageBuilderDep,
@@ -24,22 +24,35 @@ router = APIRouter(tags=["inputs"])
 async def get_inputs(
     latitude: Annotated[float, Query(ge=-90, le=90)],
     longitude: Annotated[float, Query(ge=-180, le=180)],
-    start_year: Annotated[int, Query()],
-    end_year: Annotated[int, Query()],
     settings: SettingsDep,
     today: TodayDep,
     registry: RegistryDep,
     package_builder: PackageBuilderDep,
+    start_year: Annotated[int | None, Query()] = None,
+    end_year: Annotated[int | None, Query()] = None,
     include: Annotated[list[str] | None, Query()] = None,
 ) -> Response:
     location = Location(latitude, longitude)
-    period = Period.from_years(
-        start_year, end_year, today=today, lag_days=settings.nasa_power_lag_days
-    )
     providers = registry.resolve(include or [])
+    provider_names = {p.name for p in providers}
+
+    if ("weather" in provider_names or not include) and (start_year is None or end_year is None):
+        raise HTTPException(
+            status_code=422,
+            detail="start_year and end_year are required when weather provider is included",
+        )
+
+    if start_year is not None and end_year is not None:
+        period = Period.from_years(
+            start_year, end_year, today=today, lag_days=settings.nasa_power_lag_days
+        )
+        filename = f"rufas_inputs_{latitude}_{longitude}_{start_year}_{end_year}.zip"
+    else:
+        period = None
+        filename = f"rufas_inputs_{latitude}_{longitude}.zip"
+
     results = await asyncio.gather(*(provider.build(location, period) for provider in providers))
     archive = package_builder.build(results, location, period)
-    filename = f"rufas_inputs_{latitude}_{longitude}_{start_year}_{end_year}.zip"
     return Response(
         content=archive,
         media_type=ZIP_MEDIA_TYPE,
